@@ -21,6 +21,7 @@ async function run() {
     try {
         const bikeCategoryCollection = client.db('bikeHunt').collection('bikeCategoryCollection')
         const bikeCollection = client.db('bikeHunt').collection('categoryCollection')
+        const ordersCollection = client.db('bikeHunt').collection('orders')
 
 
         app.get('/bikeCategoryCollection', async (req, res) => {
@@ -42,6 +43,13 @@ async function run() {
             const query = { category_id: id }
             const product = await bikeCollection.find(query).toArray();
             res.send(product)
+        })
+
+        app.post('/orders', async (req, res) => {
+            const orders = req.body;
+            console.log(orders)
+            const result = await ordersCollection.insertOne(orders)
+            res.send(result);
         })
 
 
