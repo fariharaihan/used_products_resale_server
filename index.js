@@ -45,6 +45,7 @@ async function run() {
         const bikeCollection = client.db('bikeHunt').collection('categoryCollection')
         const ordersCollection = client.db('bikeHunt').collection('orders')
         const usersCollection = client.db('bikeHunt').collection('users')
+        const productsCollection = client.db('bikeHunt').collection('products')
 
 
         app.get('/bikeCategoryCollection', async (req, res) => {
@@ -140,6 +141,19 @@ async function run() {
             }
             const result = await usersCollection.updateOne(filter, updateDoc, option)
             res.send(result)
+        })
+
+        app.get('/products', async (req, res) => {
+            const query = {};
+            const products = await productsCollection.find(query).toArray();
+            res.send(products);
+        })
+
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            console.log(product)
+            const result = await productsCollection.insertOne(product)
+            res.send(result);
         })
 
     }
