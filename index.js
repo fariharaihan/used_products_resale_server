@@ -1,16 +1,16 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken');
-require('dotenv').config()
+require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 
 const app = express();
 
 // middle wares
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
 
 
@@ -50,23 +50,23 @@ async function run() {
 
         app.get('/bikeCategoryCollection', async (req, res) => {
             const query = {};
-            console.log(query)
+            // console.log(query)
             const options = await bikeCategoryCollection.find(query).limit(3).toArray();
-            res.send(options)
+            res.send(options);
         })
 
         app.get('/categoryCollection', async (req, res) => {
             const query = {};
-            console.log(query)
+            // console.log(query)
             const cursor = await bikeCollection.find(query).toArray();
-            res.send(cursor)
+            res.send(cursor);
         })
         app.get('/allbikes/:id', async (req, res) => {
             const id = req.params.id;
             // console.log(id)
-            const query = { category_id: id }
+            const query = { category_id: id };
             const product = await bikeCollection.find(query).toArray();
-            res.send(product)
+            res.send(product);
         })
 
 
@@ -75,7 +75,7 @@ async function run() {
             const decodedEmail = req.decoded.email;
 
             if (email !== decodedEmail) {
-                return res.status(403).send({ message: 'forbidden status' })
+                return res.status(403).send({ message: 'forbidden status' });
             }
 
             const query = { email: email };
@@ -85,8 +85,8 @@ async function run() {
 
         app.post('/orders', async (req, res) => {
             const orders = req.body;
-            console.log(orders)
-            const result = await ordersCollection.insertOne(orders)
+            console.log(orders);
+            const result = await ordersCollection.insertOne(orders);
             res.send(result);
         })
 
@@ -105,12 +105,12 @@ async function run() {
         app.get('/users', async (req, res) => {
             const query = {};
             const users = await usersCollection.find(query).toArray();
-            res.send(users)
+            res.send(users);
         })
 
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
-            const query = { email }
+            const query = { email };
             const user = await usersCollection.findOne(query);
             res.send({ isAdmin: user?.role === 'admin' });
         })
@@ -132,15 +132,15 @@ async function run() {
             }
 
             const id = req.params.id;
-            const filter = { _id: ObjectId(id) }
-            const option = { upsert: true }
+            const filter = { _id: ObjectId(id) };
+            const option = { upsert: true };
             const updateDoc = {
                 $set: {
                     role: 'admin'
                 }
             }
             const result = await usersCollection.updateOne(filter, updateDoc, option)
-            res.send(result)
+            res.send(result);
         })
 
         app.get('/products', async (req, res) => {
@@ -151,8 +151,8 @@ async function run() {
 
         app.post('/products', async (req, res) => {
             const product = req.body;
-            console.log(product)
-            const result = await productsCollection.insertOne(product)
+            console.log(product);
+            const result = await productsCollection.insertOne(product);
             res.send(result);
         })
 
@@ -171,10 +171,10 @@ async function run() {
 run().catch(console.log)
 
 app.get('/', (req, res) => {
-    res.send('Bike hunt service running')
+    res.send('Bike hunt service running');
 })
 
 app.listen(port, () => {
-    console.log(`Bike Hunt service running on ${port}`)
+    console.log(`Bike Hunt service running on ${port}`);
 })
 
